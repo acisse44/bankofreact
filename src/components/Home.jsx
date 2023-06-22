@@ -1,7 +1,9 @@
 import React from "react";
+import './styles.css';
 
-const Home = () => { //Our homepage 
-    return <h1>Welcome to the Bank App</h1 > //will show this on the homepage
+
+const Home = () => { //below message will display on our homepage
+    return <h1 id = "welcome">Welcome to the Bank App</h1 > 
 }
 
 export default Home;

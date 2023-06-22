@@ -1,82 +1,61 @@
 import React, {useEffect, useState} from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AccountBalance from "./AccountBalance";
 
-function Credit() {
-const [yourCredit , setYourCredit] = useState("");
-const [creditAmount, setCreditAmount] = useState("");
-const [currentDate, setCurrentDate] = useState("");
+function Credit(props) { 
+    const [currentDate, setCurrentDate] = useState(""); 
 
-
-useEffect(() => {
-    async function loadAccountBalance() {
-        try {
-            const response = await fetch(
-                `https://bank-of-react-b745wfs0u-ajlapid718.vercel.app/credits`
-            );
-            const data = await response.json();
-            setYourCredit(data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    loadAccountBalance();
-}, []);
-
-function handleCredit(event) {
-    setCreditAmount(event.target.value);
-}
-function handleGivenCredit(event) {
-    setYourCredit(prevCredit => prevCredit + Number(creditAmount));
-    setCreditAmount("");
-}
-useEffect(() => {
-    handleCurrentDate();
-  }, []);
-
-  function handleCurrentDate() {
-    let today = new Date().toLocaleDateString();
-    setCurrentDate(today);
-    console.log(today);
-  }
+    useEffect(() => {
+        handleCurrentDate();
+      }, []);
+    
+      function handleCurrentDate() {
+        let today = new Date().toLocaleDateString();
+        setCurrentDate(today);
+        console.log(today);
+      }
 
 
 return (
     <div>
-        <h1>Credit</h1>
+        <h1>Credits </h1>
 
 
-        <h2>Current Balance</h2>
-        {/* <button onClick={handleDebit}>Display Account Balance</button> */}
-         <AccountBalance AccountBalance = {yourCredit}></AccountBalance>
+        <h2>Your Current Balance </h2>
+        <p>${props.balance} </p>
 
-         <h3>Credit Amount</h3>
+        <h3> Today's Date: {currentDate} </h3>
 
-         <input
-            id= "addCredit"
-            type = "text"
-            value = {creditAmount}
-            onChange= {handleCredit}
-            placeholder="Enter Amount"
-         />
-        <button onClick= {handleGivenCredit} id="searchC" >
-            Submit
-        </button>
+         <h4>Transaction</h4>
 
-        <h4> Date: {currentDate} </h4>
+         <form id="form"> Credit $ : <input type = "text"  
+            value={props.creditAmount}
+            onChange={props.handleCredit} 
+            placeholder="Enter Amount" /> 
+        <p></p>
+      Description of Transaction: <input type = "text"  
+        value={props.creditDesc}
+        onChange={props.handleCreditDesc} 
+        placeholder="Enter Description" />
+    </form>
+    <p> </p>
 
 
-        <h5>Description</h5>
-            <input
-                id= "describeCredit"
-                type = "text"
-                placeholder="Enter Description"
-            />
+        <button onClick= {props.handleGivenCredit} id="searchC" > Submit </button>
 
-        <button onClick= {handleGivenCredit} id="searchC" >
-            Submit
-        </button>
-
+        <h2>Transaction History</h2>
+        {props.savedCredits.length > 0 ? (
+        <ul>
+          {props.savedCredits.map((credit, index) => (
+            <li key={index}>
+                <p>Transaction Date: {credit.currentDate}</p>
+                <p>Credit Amount: $ {credit.transactionCredit}</p>
+                <p>Description: {credit.creditDesc}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p></p>
+      )}
         <nav>
             <ul>
                 <li>

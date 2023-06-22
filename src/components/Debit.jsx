@@ -1,38 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import AccountBalance from "./AccountBalance";
+import './styles.css';
 
-function Debit() {
-const [yourDebit , setYourDebit] = useState("");
-const [debitAmount, setDebitAmount] = useState("");
-const [currentDate, setCurrentDate] = useState("");
-const [yourDescription, setYourDescription] = useState("");
 
-useEffect(() => {
-    async function loadAccountBalance() {
-        try {
-            const response = await fetch(
-                `https://bank-of-react-b745wfs0u-ajlapid718.vercel.app/debits`
-            );
-            const data = await response.json();
-            setYourDebit(data);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    loadAccountBalance();
-}, []);
-
-function handleDebit(event) {
-    setDebitAmount(event.target.value);
-}
-function handleGivenDebit(event) {
-    setYourDebit(prevDebit => prevDebit - Number(debitAmount));
-    setDebitAmount("");
-}
-function handleGivenDescription(event) {
-   return setYourDescription(event.target.value);
-}
+function Debit (props) {
+    const [currentDate, setCurrentDate] = useState("");
 
 useEffect(() => {
     handleCurrentDate();
@@ -43,56 +15,68 @@ useEffect(() => {
     setCurrentDate(today);
     console.log(today);
   }
-
-return (
+  
+  return (
     <div>
-        <h1 id= "debHeading"> Debits</h1>
+      <h1>Debits</h1>
+
+      <h2> Your Current Balance </h2>
+      <p>${props.balance}</p>
 
 
-        <h2>Current Balance</h2>
-        {/* <button onClick={handleDebit}>Display Account Balance</button> */}
-         <AccountBalance AccountBalance = {yourDebit}></AccountBalance>
+    <div id = "inDebit">
 
-         <h3 id= "debAmountHeading">Debit Amount</h3>
+        <h4>Today's Date: {currentDate}</h4>
 
-         <input
-            id= "subtractDebit"
-            type = "text"
-            value = {debitAmount}
-            onChange= {handleDebit}
-            placeholder="Enter Amount"
-         />
-        <button onClick= {handleGivenDebit} id="searchD" >
-            Submit
-        </button>
+        <h3 >Transaction</h3>
 
-        <h4> Date: {currentDate} </h4>
+        <form > Debit $ : <input type = "text" value={props.debitAmount}
+            onChange={props.handleDebit} 
+            placeholder="Enter Amount" /> 
+    <p></p>
+      Transaction Description : 
+        <input type = "text"  value={props.debitDesc}
+        onChange={props.handleDebitDesc} 
+        placeholder="Enter Description" />
+    </form>
 
-        <h5> Description</h5>
-            <input
-                id= "describeDebit"
-                type = "text"
-                placeholder="Enter Description"
-            />
+    <p></p>
 
-        <button onClick= {handleGivenDescription} id="searchD" >
-            Submit
-        </button>
+      <button onClick={props.handleGivenDebit}> Submit </button>
 
-        <nav>
-            <ul>
-                <li>
-                    <Link to="/userProfile">Back to User Profile</Link>
-                </li>
-                <li>
-                    <Link to="/">Back to Home</Link>
-                </li>
-            </ul>
-        </nav>
+      </div>
+
+
+      <h2>Transaction History</h2>
+        {props.savedDebits.length > 0 ? (
+        <ul>
+          {props.savedDebits.map((debit, index) => (
+            <li key={index}>
+                <p>Transaction Date: {debit.currentDate}</p>
+                <p>Debit Amount: $ {debit.transactionDebit}</p>
+                <p>Description: {debit.debitDesc}</p>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p></p>
+      )}
+
+      <nav>
+        <ul>
+          <li>
+            <Link to="/userProfile">Back to User Profile</Link>
+          </li>
+          <li>
+            <Link to="/">Back to Home</Link>
+          </li>
+        </ul>
+      </nav>
     </div>
-
-    );
-}
-
+  );
+};
 
 export default Debit;
+
+
+

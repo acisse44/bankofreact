@@ -13,35 +13,6 @@
   }
 }
 
-#searchC{
-background-color: bisque;
-}
-
-#searchD{
-  background-color:blanchedalmond;
-
-}
-
-#describeDebit{
-
-}
-
-#describeCredit{
-
-
-}
-
-#debHeading{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-#debAmountHeading{
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
 
 .App-header {
   background-color: #282c34;
